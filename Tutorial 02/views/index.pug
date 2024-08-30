@@ -20,12 +20,12 @@ html
     main#content
       case action
         when 'show'
-            include contact.pug
+          include contact.pug
         when 'new'
-            include form.pug
+          include form.pug
         when 'edit'
-            include form.pug
+          include form.pug
         default
-            p Select a contact
+          p Select a contact
 
     script(src='https://unpkg.com/htmx.org@1.9.10')

@@ -4,8 +4,8 @@ ul.contact-list
       a(
         href=`/contacts/${contact.id}`,
         hx-get=`/contacts/${contact.id}`,
-        hx-target='#content',
-        hx-push-url='true'
+        hx-target='#content'
+        hx-push-url='true',
       )= contact.name
 
 div.actions
