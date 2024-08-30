@@ -1,17 +1,17 @@
-ul.contact-list
-  each contact in contacts
+ul.grocery-list
+  each grocery in grocerys
     li
       a(
-        href=`/contacts/${contact.id}`,
-        hx-get=`/contacts/${contact.id}`,
+        href=`/grocerys/${grocery.id}`,
+        hx-get=`/grocerys/${grocery.id}`,
         hx-target='#content',
         hx-push-url='true'
-      )= contact.name
+      )= grocery.name
 
 div.actions
   a(
-    href='/contacts/new',
-    hx-get='/contacts/new',
+    href='/grocerys/new',
+    hx-get='/grocerys/new',
     hx-target='#content',
     hx-push-url='true'
-  ) New Contact
+  ) New grocery

@@ -1,22 +1,22 @@
-isEditing = () => !(Object.keys(contact).length === 0);
+isEditing = () => !(Object.keys(grocery).length === 0);
 
-h2=isEditing() ? "Edit Contact" : "New Contact"
+h2=isEditing() ? "Edit grocery" : "New grocery"
 
 form(
-  action=isEditing() ? `/update/${contact.id}?_method=PUT` : '/contacts',
+  action=isEditing() ? `/update/${grocery.id}?_method=PUT` : '/grocerys',
   method='POST',
 
-  hx-post=isEditing() ? false : '/contacts',
-  hx-put=isEditing() ? `/update/${contact.id}` : false,
+  hx-post=isEditing() ? false : '/grocerys',
+  hx-put=isEditing() ? `/update/${grocery.id}` : false,
   hx-target='#sidebar',
-  hx-push-url=isEditing() ? `/contacts/${contact.id}` : false
+  hx-push-url=isEditing() ? `/grocerys/${grocery.id}` : false
   hx-on::after-request='if(event.detail.successful) this.reset()',
 )
   label(for='name') Name:
-  input#name(type='text', name='name', required, value=contact.name)
+  input#name(type='text', name='name', required, value=grocery.name)
 
   label(for='email') Email:
-  input#email(type='email', name='email', required, value=contact.email)
+  input#email(type='email', name='email', required, value=grocery.email)
 
   div.actions
     button(type='submit') Submit
