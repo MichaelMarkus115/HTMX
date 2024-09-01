@@ -1,15 +1,16 @@
 {
   "name": "contact-manager",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "An HTMX-powered CRUD app",
+  "main": "app.js",
   "scripts": {
     "dev": "node --watch app.js"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "James Hibbard",
+  "license": "MIT",
   "dependencies": {
+    "body-parser": "^1.20.2",
     "express": "^4.19.2",
     "method-override": "^3.0.0",
     "pug": "^3.0.3"

@@ -1,17 +1,17 @@
-ul.contact-list
-  each contact in contacts
+ul.food-product-list
+  each foodProduct in foodProducts
     li
       a(
-        href=`/contacts/${contact.id}`,
-        hx-get=`/contacts/${contact.id}`,
+        href=`/food-products/${foodProduct.id}`,
+        hx-get=`/food-products/${foodProduct.id}`,
         hx-target='#content',
         hx-push-url='true'
-      )= contact.name
+      )= foodProduct.name
 
 div.actions
   a(
-    href='/contacts/new',
-    hx-get='/contacts/new',
+    href='/food-products/new',
+    hx-get='/food-products/new',
     hx-target='#content',
     hx-push-url='true'
-  ) New Contact
+  ) New Food Product

@@ -1,0 +1,19 @@
+doctype html
+
+h2 #{foodProduct.name}
+
+p
+  strong Name: #{foodProduct.name}
+
+p
+  strong Quantity: #{foodProduct.quantity}
+
+p
+  strong Ingredients: #{foodProduct.ingredients.join(', ')}
+
+div.actions
+  form(method='POST', action=`/food-products/${foodProduct.id}?_method=DELETE`)
+    input(type='hidden', name='_csrf', value='YOUR_CSRF_TOKEN_HERE')
+    button(type='submit', class='link') Delete Food Product
+
+  a(href=`/food-products/${foodProduct.id}/edit`, hx-get=`/food-products/${foodProduct.id}/edit`, hx-push-url='true', hx-target='#content') Edit Food Product

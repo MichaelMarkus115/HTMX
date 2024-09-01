@@ -1,121 +1,147 @@
 const express = require('express');
+
 const router = express.Router();
 
-const contacts = [
-    { id: 1, name: 'John Doe', email: 'john.doe@example.com' },
-    { id: 2, name: 'Jane Smith', email: 'jane.smith@example.com' },
-    { id: 3, name: 'Emily Johnson', email: 'emily.johnson@example.com' },
-    { id: 4, name: 'Aarav Patel', email: 'aarav.patel@example.com' },
-    { id: 5, name: 'Liu Wei', email: 'liu.wei@example.com' },
-    { id: 6, name: 'Fatima Zahra', email: 'fatima.zahra@example.com' },
-    { id: 7, name: 'Carlos Hernández', email: 'carlos.hernandez@example.com' },
-    { id: 8, name: 'Olivia Kim', email: 'olivia.kim@example.com' },
-    { id: 9, name: 'Kwame Nkrumah', email: 'kwame.nkrumah@example.com' },
-    { id: 10, name: 'Chen Yu', email: 'chen.yu@example.com' },
-  ];
+const foodProducts = [
+  { id: 1, name: 'Apple', category: 'Fruit', price: 1.00, quantity: 10, ingredients: ['Apple'] },
+  { id: 2, name: 'Banana', category: 'Fruit', price: 0.50, quantity: 20, ingredients: ['Banana'] },
+  { id: 3, name: 'Carrot', category: 'Vegetable', price: 0.30, quantity: 15, ingredients: ['Carrot'] },
+  { id: 4, name: 'Chicken Breast', category: 'Meat', price: 5.00, quantity: 8, ingredients: ['Chicken'] },
+  { id: 5, name: 'Milk', category: 'Dairy', price: 1.50, quantity: 5, ingredients: ['Milk'] },
+];
 
-// // GET /contacts
-// router.get('/contacts', async (req, res) => {
-//   res.send('It works!');
-// });
 
-// GET /contacts using template
-router.get('/contacts', (req, res) => {
-    res.render('index', { contacts });
-  });
+// GET /food-products
+router.get('/food-products', (req, res) => {
+  res.render('index', { action: '', foodProducts, foodProduct: {} });
+});
 
-  // GET /contacts/new
-router.get('/contacts/new', (req, res) => {
-    if (req.headers['hx-request']) {
-        res.render('form');
-        res.render('form', { contact: {} });
-    } else {
-      res.render('index', { action: 'new', contacts, contact: {} });
-    }
-  });
+// GET /food-products/new
+router.get('/food-products/new', (req, res) => {
+  if (req.headers['hx-request']) {
+    res.render('form', { foodProduct: {} });
+  } else {
+    res.render('index', { action: 'new', foodProducts, foodProduct: {} });
+  }
+});
 
-// GET /contacts/1
-router.get('/contacts/:id', (req, res) => {
-    const { id } = req.params;
-    const contact = contacts.find((c) => c.id === Number(id));
-  
-    if (req.headers['hx-request']) {
-        res.render('contact', { contact });
-      } else {
-        res.render('index', { action: 'show', contacts, contact });
-      }
-  });
+// GET /food-products/:id
+router.get('/food-products/:id', (req, res) => {
+  const { id } = req.params;
+  const foodProduct = foodProducts.find((p) => p.id === Number(id));
 
-// POST /contacts
-router.post('/contacts', (req, res) => {
-    const newContact = {
-      id: contacts.length + 1,
-      name: req.body.name,
-      email: req.body.email,
-    };
-  
-    contacts.push(newContact);
-  
-    if (req.headers['hx-request']) {
-        res.render('sidebar', { contacts }, (err, sidebarHtml) => {
-          const html = `
-            <main id="content" hx-swap-oob="afterbegin">
-              <p class="flash">Contact was successfully added!</p>
-            </main>
-            ${sidebarHtml}
-          `;
-          res.send(html);
-        });
-      } else {
-        res.render('index', { action: 'new', contacts, contact: {} });
-      }
-  });  
+  if (!foodProduct) {
+    return res.status(404).send('Product not found');
+  }
 
-// GET /contacts/1/edit
-router.get('/contacts/:id/edit', (req, res) => {
-    const { id } = req.params;
-    const contact = contacts.find((c) => c.id === Number(id));
-  
-    if (req.headers['hx-request']) {
-      res.render('form', { contact });
-    } else {
-      res.render('index', { action: 'edit', contacts, contact });
-    }
-  });  
+  if (req.headers['hx-request']) {
+    res.render('foodProduct', { foodProduct });
+  } else {
+    res.render('index', { action: 'show', foodProducts, foodProduct });
+  }
+});
 
-//***************************router.put("/update/:id", ) */
-// PUT /contacts/1
-router.put('/contacts/:id', (req, res) => {
-    const { id } = req.params;
-  
-    const newContact = {
-      id: Number(id),
-      name: req.body.name,
-      email: req.body.email,
-    };
-  
-    const index = contacts.findIndex((c) => c.id === Number(id));
-  
-    if (index !== -1) contacts[index] = newContact;
-  
-    if (req.headers['hx-request']) {
-      res.render('sidebar', { contacts }, (err, sidebarHtml) => {
-        res.render('contact', { contact: contacts[index] }, (err, contactHTML) => {
-          const html = `
-            ${sidebarHtml}
-            <main id="content" hx-swap-oob="true">
-              <p class="flash">Contact was successfully updated!</p>
-              ${contactHTML}
-            </main>
-          `;
-  
-          res.send(html);
-        });
+// GET /food-products/:id/edit
+router.get('/food-products/:id/edit', (req, res) => {
+  const { id } = req.params;
+  const foodProduct = foodProducts.find((p) => p.id === Number(id));
+
+  if (!foodProduct) {
+    return res.status(404).send('Product not found');
+  }
+
+  if (req.headers['hx-request']) {
+    res.render('form', { foodProduct });
+  } else {
+    res.render('index', { action: 'edit', foodProducts, foodProduct });
+  }
+});
+
+// POST /food-products
+router.post('/food-products', (req, res) => {
+  const newFoodProduct = {
+    id: foodProducts.length + 1,
+    name: req.body.name,
+    category: req.body.category,
+    price: parseFloat(req.body.price),
+    ingredients: req.body.ingredients.split(',').map(ingredient => ingredient.trim()),
+  };
+
+  foodProducts.push(newFoodProduct);
+
+  if (req.headers['hx-request']) {
+    res.render('sidebar', { foodProducts }, (err, sidebarHtml) => {
+      const html = `
+        <main id="content" hx-swap-oob="afterbegin">
+          <p class="flash">Food product was successfully added!</p>
+        </main>
+        ${sidebarHtml}
+      `;
+      res.send(html);
+    });
+  } else {
+    res.render('index', { action: 'new', foodProducts, foodProduct: {} });
+  }
+});
+
+// PUT /food-products/:id
+// PUT /food-products/:id
+router.put('/food-products/:id', (req, res) => {
+  const { id } = req.params;
+
+  const updatedFoodProduct = {
+    id: Number(id),
+    name: req.body.name,
+    category: req.body.category,
+    price: parseFloat(req.body.price),
+    quantity: parseInt(req.body.quantity),  // Ensure quantity is an integer
+    ingredients: req.body.ingredients.split(',').map(ingredient => ingredient.trim()),
+  };
+
+  const index = foodProducts.findIndex((p) => p.id === Number(id));
+
+  if (index !== -1) foodProducts[index] = updatedFoodProduct;
+
+  if (req.headers['hx-request']) {
+    res.render('sidebar', { foodProducts }, (err, sidebarHtml) => {
+      res.render('foodProduct', { foodProduct: foodProducts[index] }, (err, foodProductHTML) => {
+        const html = `
+          ${sidebarHtml}
+          <main id="content" hx-swap-oob="true">
+            <p class="flash">Food product was successfully updated!</p>
+            <p>Updated Quantity: ${foodProducts[index].quantity}</p> <!-- Display updated quantity -->
+          </main>
+        `;
+        res.send(html);
       });
-    } else {
-      res.redirect(`/contacts/${index + 1}`);
-    }
-  });
-  
-  
+    });
+  } else {
+    res.render('index', { action: 'edit', foodProducts, foodProduct: foodProducts[index] });
+  }
+});
+
+
+// DELETE /food-products/:id
+router.delete('/food-products/:id', (req, res) => {
+  const { id } = req.params;
+  const index = foodProducts.findIndex((p) => p.id === Number(id));
+
+  if (index !== -1) {
+    foodProducts.splice(index, 1);
+  }
+
+  if (req.headers['hx-request']) {
+    res.render('sidebar', { foodProducts }, (err, sidebarHtml) => {
+      const html = `
+        <main id="content" hx-swap-oob="true">
+          <p class="flash">Food product was successfully deleted!</p>
+        </main>
+      `;
+      res.send(html);
+    });
+  } else {
+    res.redirect('/food-products');
+  }
+});
+
 module.exports = router;
