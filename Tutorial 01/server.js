@@ -42,7 +42,7 @@ app.post('/convert', (req, res) => {
 
         res.send(`
             <p>
-                ${farenheit} degrees Farenheit is equal to ${celcius} degrees Celcius
+                ${farenheit} degrees Farenheit is equal to ${celcius.toFixed(2)} degrees Celcius
             </p>
             `);
     }, 2000)
